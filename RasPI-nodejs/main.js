@@ -1,3 +1,7 @@
+var http = require('http');
+
+const URL = 'http://agile-shore-6333.herokuapp.com/';
+
 var SerialPort = require('serialport');
 
 console.log("initializing...");
@@ -32,7 +36,35 @@ var spfunc = function(opt, opencb, datacb) {
 
 var sp1 = spfunc({portName: '/dev/ttyACM0', bardrate: 9600});
 
-setTimeout(function() {
-	console.log("writing...");
-	sp1.write("10\n");
-}, 5000);
+function watch() {
+	http.get(URL, (res) => {
+		var body = '';
+		res.setEncoding('utf8');
+
+		res.on('data', (chunk) => {
+			body += chunk;
+		});
+
+		res.on('end', (res) => {
+			console.log({"body": body});
+			res = JSON.parse(body);
+			console.log({res: res});
+			sp1.write(''+(res.stretch * 1.8)+'\n');
+			setWatch(0);
+		});
+	}).on('error', (e) => {
+		console.log(e.message);
+		setWatch(10000);
+	});
+}
+
+var timer = null;
+function setWatch(timeout) {
+	if (timer != null) {
+		clearTimeout(timer);
+		timer = null;
+	}
+	timer = setTimeout(watch, timeout);
+}
+
+setWatch(0);
