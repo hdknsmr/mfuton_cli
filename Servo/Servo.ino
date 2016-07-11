@@ -11,6 +11,7 @@ const static int PIN_NO[] = {
 Servo myServo[sizeof(PIN_NO)/sizeof(PIN_NO[0])];
 
 void setup() {
+  while (!Serial) ;
   Serial.begin(9600);
   Serial.println("intializing...");
   Serial.flush();
@@ -31,8 +32,8 @@ void setAngle(int a) {
     myServo[i].write(a);
   }
   Serial.print("waiting: ");
-  Serial.println(prevMax*SERVO_SPEED+100);
-  delay(prevMax*SERVO_SPEED+100);
+  Serial.println(prevMax*SERVO_SPEED+300);
+  delay(prevMax*SERVO_SPEED+300);
   for (int i; i<sizeof(PIN_NO)/sizeof(PIN_NO[0]); i++) {
     myServo[i].detach();
   }
