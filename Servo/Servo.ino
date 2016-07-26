@@ -1,14 +1,18 @@
 #include <Servo.h>
 
-const static int PIN_NO[] = {
-   9, 10,
+const static struct {
+  int no;
+  int dir;
+} PIN[] = {
+  { 9, 1},
+  {10, -1},
 };
 
-#define SERVO_MIN 1000
-#define SERVO_MAX 2000
+#define SERVO_MIN 850
+#define SERVO_MAX 2150
 #define SERVO_SPEED (330.0/60)
 
-Servo myServo[sizeof(PIN_NO)/sizeof(PIN_NO[0])];
+Servo myServo[sizeof(PIN)/sizeof(PIN[0])];
 
 void setup() {
   while (!Serial) ;
@@ -23,18 +27,23 @@ void setAngle(int a) {
   Serial.print("setAngle: ");
   Serial.println(a);
   int prevMax = 0;
-  for (int i; i<sizeof(PIN_NO)/sizeof(PIN_NO[0]); i++) {
-    myServo[i].attach(PIN_NO[i], SERVO_MIN, SERVO_MAX);
-    int prev= (abs(a-myServo[i].read()));
+  for (int i; i<sizeof(PIN)/sizeof(PIN[0]); i++) {
+    myServo[i].attach(PIN[i].no, SERVO_MIN, SERVO_MAX);
+    int a1 = PIN[i].dir>0 ? a: 180-a;
+    int prev= (abs(a1-myServo[i].read()));
     if (prevMax < prev) {
       prevMax = prev;
     }
-    myServo[i].write(a);
+    Serial.print("[");
+    Serial.print(i);
+    Serial.print("]=");
+    Serial.println(a1);
+    myServo[i].write(a1);
   }
   Serial.print("waiting: ");
-  Serial.println(prevMax*SERVO_SPEED+300);
-  delay(prevMax*SERVO_SPEED+300);
-  for (int i; i<sizeof(PIN_NO)/sizeof(PIN_NO[0]); i++) {
+  Serial.println(prevMax*SERVO_SPEED+100);
+  delay(prevMax*SERVO_SPEED+100);
+  for (int i; i<sizeof(PIN)/sizeof(PIN[0]); i++) {
     myServo[i].detach();
   }
 }
