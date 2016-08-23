@@ -9,6 +9,7 @@
   "author": "NISHIMURA Hideki",
   "license": "ISC",
   "dependencies": {
+    "firebase": "^3.3.0",
     "serialport": "^4.0.0"
   }
 }
