@@ -15,7 +15,7 @@ function _init() {
 
 function _on(ev, cb) {
 	// console.log(ref);
-	ref.once(ev, cb);
+	ref.on(ev, cb);
 }
 
 module = function() {
