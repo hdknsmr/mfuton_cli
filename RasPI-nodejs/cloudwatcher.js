@@ -18,7 +18,7 @@ function _on(ev, cb) {
 	ref.on(ev, cb);
 }
 
-module = function() {
+module.exports = function() {
 	_init();
 	return {
 		_ref : ref,
@@ -29,7 +29,7 @@ module = function() {
 }
 
 if (process.argv[1].match(/cloudwatcher/)) {
-	m = module();
+	m = module.exports();
 	m.onValue(function(snapshot) {
 		console.log(snapshot.val());
 	});
