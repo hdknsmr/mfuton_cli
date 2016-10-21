@@ -12,6 +12,9 @@ const static struct {
 #define SERVO_MAX 2150
 #define SERVO_SPEED (330.0/60)
 
+#define MAX_BUTTON 2
+#define MIN_BUTTON 4
+
 Servo myServo[sizeof(PIN)/sizeof(PIN[0])];
 
 void setup() {
@@ -21,6 +24,8 @@ void setup() {
   Serial.flush();
   setAngle(0);
   Serial.println("done.");
+  pinMode(MIN_BUTTON, INPUT_PULLUP);
+  pinMode(MAX_BUTTON, INPUT_PULLUP);
 }
 
 void setAngle(int a) {
@@ -69,6 +74,20 @@ void loop() {
       }
       line[idx++] = ch;
       line[idx] = 0;
+    }
+  }
+  if (digitalRead(MIN_BUTTON)==LOW) {
+    Serial.println("min low");
+    delay(30);
+    if (digitalRead(MIN_BUTTON)==LOW) {
+      setAngle(0);
+    }
+  }
+  if (digitalRead(MAX_BUTTON)==LOW) {
+    Serial.println("max low");
+    delay(30);
+    if (digitalRead(MAX_BUTTON)==LOW) {
+      setAngle(180);
     }
   }
 }
