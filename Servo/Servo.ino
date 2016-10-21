@@ -18,7 +18,7 @@ const static struct {
 Servo myServo[sizeof(PIN)/sizeof(PIN[0])];
 
 void setup() {
-  while (!Serial) ;
+  delay(5000);
   Serial.begin(9600);
   Serial.println("intializing...");
   Serial.flush();
